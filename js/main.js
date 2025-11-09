@@ -6,6 +6,162 @@
     Version: 1.0
     Created: Colorlib
 ---------------------------------------------------------  */
+// Add this JavaScript for mobile menu functionality and header scroll effect
+// Mobile menu functionality
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.querySelector(".adk-portfolio-grid");
+  const items = Array.from(grid.children);
+
+  // Shuffle items randomly
+  const shuffled = items.sort(() => Math.random() - 0.5);
+
+  // Clear and re-append in random order
+  grid.innerHTML = "";
+  shuffled.forEach(item => grid.appendChild(item));
+});
+
+   // Filter functionality
+        const filterItems = document.querySelectorAll('.adk-filter-item');
+        const portfolioItems = document.querySelectorAll('.adk-portfolio-item');
+
+        filterItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                filterItems.forEach(f => f.classList.remove('adk-active'));
+                // Add active class to clicked item
+                this.classList.add('adk-active');
+
+                const filterValue = this.getAttribute('data-filter');
+
+                portfolioItems.forEach(portfolioItem => {
+                    if (filterValue === 'all') {
+                        portfolioItem.classList.remove('adk-hidden');
+                    } else {
+                        if (portfolioItem.getAttribute('data-category') === filterValue) {
+                            portfolioItem.classList.remove('adk-hidden');
+                        } else {
+                            portfolioItem.classList.add('adk-hidden');
+                        }
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('adkLightbox');
+        const lightboxImg = document.getElementById('adkLightboxImg');
+        const closeBtn = document.querySelector('.adk-lightbox-close');
+
+        portfolioItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const imgSrc = this.querySelector('img').src;
+                lightboxImg.src = imgSrc;
+                lightbox.classList.add('adk-active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeLightbox();
+        });
+
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('adk-active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && lightbox.classList.contains('adk-active')) {
+                closeLightbox();
+            }
+        });
+// main
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.querySelector('.adr-hamburger');
+    const mobileMenu = document.querySelector('.adr-mobile-menu');
+    const mobileClose = document.querySelector('.adr-mobile-close');
+    const mobileLinks = document.querySelectorAll('.adr-mobile-nav a');
+
+    // Open mobile menu
+    if (hamburger) {
+        hamburger.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    // Close mobile menu
+    if (mobileClose) {
+        mobileClose.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    // Close menu when clicking a link
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+});
+
+// Counter Animation
+document.addEventListener('DOMContentLoaded', function() {
+    const counters = document.querySelectorAll('.adr-stat-number');
+    let animated = false;
+
+    const animateCounters = () => {
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-count'));
+            const duration = 2500;
+            const increment = target / (duration / 16);
+            let current = 0;
+
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    counter.textContent = Math.floor(current).toLocaleString();
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.textContent = target.toLocaleString();
+                }
+            };
+
+            updateCounter();
+        });
+    };
+
+    // Intersection Observer for scroll animation
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !animated) {
+                animated = true;
+                animateCounters();
+            }
+        });
+    }, observerOptions);
+
+    const statsSection = document.querySelector('.adr-stats-section');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+});
 
 'use strict';
 
